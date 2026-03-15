@@ -1,0 +1,389 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<!-- ===== TODO 1 : NOM DE L'ONGLET =====
+Remplacer "Bankinsurance" par le nom du lanceur.
+Exemples : Navimeteo / Santé / Admin / Services
+C'est le nom visible dans l'onglet du navigateur.
+===== FIN TODO 1 ===== -->
+<title>Bankinsurance</title>
+
+<style>
+
+/* NEPASMODIFIER : design général */
+
+:root{
+  --text:#0b1f3a;
+  --muted:rgba(11,31,58,.72);
+
+  --tile-bg:rgba(255,255,255,.26);
+  --tile-bg-hover:rgba(255,255,255,.34);
+  --tile-border:rgba(0,25,60,.12);
+
+  --tile-w:160px;
+  --tile-h:110px;
+  --gap:18px;
+  --radius:0px;
+
+  --shadow-tile:0 10px 22px rgba(0,0,0,.14);
+  --shadow-tile-hover:0 16px 32px rgba(0,0,0,.18);
+
+  --pill-bg:rgba(255,255,255,.38);
+  --pill-border:rgba(0,25,60,.15);
+  --pill-text:#07182d;
+}
+
+/* ===== TODO 2 : OPTIONNEL - TAILLE DES TUILES =====
+Si tu veux changer la taille des tuiles, modifie uniquement :
+--tile-w
+--tile-h
+--gap
+--radius
+Sinon ne touche à rien.
+===== FIN TODO 2 ===== */
+
+*{box-sizing:border-box}
+html,body{height:100%}
+
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  color:var(--text);
+
+  /* ===== TODO 3 : IMAGE DE FOND =====
+  Remplacer "banques.jpg" par ton image de fond.
+  Exemple : navimeteo.jpeg
+  Le fichier doit être dans le même dossier que index.html.
+  ===== FIN TODO 3 ===== */
+
+  background:url("banques.jpg") no-repeat center center fixed;
+  background-size:cover;
+  overflow-x:hidden;
+}
+
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:
+    radial-gradient(900px 500px at 20% 10%, rgba(255,255,255,.14), transparent 60%),
+    linear-gradient(180deg, rgba(255,255,255,.05), rgba(0,0,0,.05));
+  z-index:-1;
+}
+
+.wrap{
+  max-width:1180px;
+  margin:0 auto;
+  padding:38px 26px 44px;
+}
+
+h1{
+  margin:0;
+  font-size:28px;
+  font-weight:900;
+  color:#07182d;
+}
+
+.subtitle{
+  margin-top:6px;
+  font-size:14px;
+  font-weight:650;
+  color:var(--muted);
+}
+
+.dash{
+  margin-top:12px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+}
+
+.pill{
+  display:inline-flex;
+  align-items:center;
+  padding:8px 12px;
+  border-radius:999px;
+  background:var(--pill-bg);
+  border:1px solid var(--pill-border);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  font-size:13px;
+  font-weight:800;
+  color:var(--pill-text);
+  box-shadow:0 8px 18px rgba(0,0,0,.12);
+  white-space:nowrap;
+}
+
+.section{margin-top:26px}
+
+.section h2{
+  margin:0 0 12px;
+  font-size:16px;
+  font-weight:850;
+  color:#07182d;
+}
+
+.grid{
+  display:flex;
+  flex-wrap:wrap;
+  gap:var(--gap);
+}
+
+.tile{
+  width:var(--tile-w);
+  height:var(--tile-h);
+  border-radius:var(--radius);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:14px;
+  background:var(--tile-bg);
+  border:1px solid var(--tile-border);
+  box-shadow:var(--shadow-tile);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  text-decoration:none;
+  transition:.18s ease;
+  position:relative;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tile:hover{
+  transform:translateY(-3px);
+  background:var(--tile-bg-hover);
+  box-shadow:var(--shadow-tile-hover);
+}
+
+.tile img{
+  max-width:100%;
+  max-height:70px;
+  object-fit:contain;
+  filter:drop-shadow(0 8px 14px rgba(0,0,0,.16));
+}
+
+.tile[data-tip]::after{
+  content: attr(data-tip);
+  position:absolute;
+  left: 50%;
+  bottom: calc(100% + 10px);
+  transform: translateX(-50%);
+  white-space: nowrap;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: rgba(10,20,35,.82);
+  color: rgba(255,255,255,.96);
+  font-size: 12px;
+  font-weight: 650;
+  letter-spacing: .2px;
+  opacity: 0;
+  pointer-events:none;
+  transition: opacity .14s ease, transform .14s ease;
+}
+
+.tile[data-tip]::before{
+  content:"";
+  position:absolute;
+  left: 50%;
+  bottom: calc(100% + 4px);
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: rgba(10,20,35,.82);
+  opacity: 0;
+  pointer-events:none;
+  transition: opacity .14s ease, transform .14s ease;
+}
+
+.tile:hover::after,
+.tile:hover::before{
+  opacity:1;
+  transform: translateX(-50%) translateY(-2px);
+}
+
+@media(max-width:720px){
+  :root{--tile-w:150px;--tile-h:104px}
+}
+
+@media(max-width:480px){
+  :root{--tile-w:100%;--tile-h:96px}
+  .tile{width:100%}
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="wrap">
+
+<header>
+
+<!-- ===== TODO 4 : NOM DU LAUNCHER ===== -->
+<h1>Bankinsurance</h1>
+<!-- ===== FIN TODO 4 ===== -->
+
+<!-- ===== TODO 5 : SOUS-TITRE ===== -->
+<div class="subtitle">Banques • Assurances • Accès client</div>
+<!-- ===== FIN TODO 5 ===== -->
+
+<div class="dash">
+<div class="pill" id="time">🕒 --:--</div>
+<div class="pill" id="date">📅 --</div>
+<div class="pill" id="weather">🌍 Autoriser localisation</div>
+</div>
+
+</header>
+
+
+<!-- ===== TODO SECTION =====
+Renommer la section si nécessaire
+===== FIN TODO SECTION ===== -->
+
+<section class="section" aria-label="Banques">
+<h2>Banques</h2>
+
+<div class="grid">
+
+<a class="tile"
+href="https://mabanque.bnpparibas/fr/gerer/comptes-et-formules/gerer-ses-comptes"
+target="_blank"
+aria-label="BNP — Ma banque"
+data-tip="BNP — Ma banque">
+<img src="bnpparibas.png" alt="BNP Paribas">
+</a>
+
+<a class="tile"
+href="https://www.banquepopulaire.fr/professionnels/"
+target="_blank"
+aria-label="Banque Populaire — Espace pro"
+data-tip="Banque Populaire — Espace pro">
+<img src="banquepopulaire.png" alt="Banque Populaire">
+</a>
+
+<a class="tile"
+href="https://fortuneo.fr"
+target="_blank"
+aria-label="Fortuneo — Banque en ligne"
+data-tip="Fortuneo — Banque en ligne">
+<img src="fortuneo.png" alt="Fortuneo">
+</a>
+
+<!-- ===== TODO AJOUTER UNE TUILE =====
+Copier une tuile complète ci-dessus
+Coller ici
+Modifier :
+href
+aria-label
+data-tip
+src
+alt
+===== FIN TODO AJOUTER UNE TUILE ===== -->
+
+</div>
+</section>
+
+
+<section class="section" aria-label="Assurances">
+<h2>Assurances</h2>
+
+<div class="grid">
+
+<a class="tile"
+href="https://www.matmut.fr/app/login/login"
+target="_blank"
+aria-label="Matmut — Espace client"
+data-tip="Matmut — Espace client">
+<img src="matmut.png" alt="Matmut">
+</a>
+
+<a class="tile"
+href="https://espace-client.allianz.fr/"
+target="_blank"
+aria-label="Allianz — Espace client"
+data-tip="Allianz — Espace client">
+<img src="allianz.png" alt="Allianz">
+</a>
+
+<!-- ===== TODO AJOUTER UNE TUILE ===== -->
+
+</div>
+</section>
+
+
+<!-- ===== TODO AJOUTER UNE SECTION =====
+Copier une section complète
+<section class="section">
+...
+</section>
+Coller ici
+Modifier le titre et les tuiles
+===== FIN TODO AJOUTER UNE SECTION ===== -->
+
+</div>
+
+
+<script>
+
+const fmtTime=new Intl.DateTimeFormat('fr-FR',{hour:'2-digit',minute:'2-digit'});
+const fmtDate=new Intl.DateTimeFormat('fr-FR',{weekday:'long',day:'2-digit',month:'long'});
+
+function updateTime(){
+const now=new Date();
+document.getElementById("time").textContent="🕒 "+fmtTime.format(now);
+document.getElementById("date").textContent="📅 "+fmtDate.format(now);
+}
+
+updateTime();
+setInterval(updateTime,15000);
+
+function iconFromCode(c){
+if(c===0) return "☀️";
+if(c<=3) return "🌤️";
+if(c===45||c===48) return "🌫️";
+if((c>=51&&c<=67)||(c>=80&&c<=82)) return "🌧️";
+if(c>=71&&c<=77) return "🌨️";
+if(c>=95) return "⛈️";
+return "🌡️";
+}
+
+async function getCity(lat,lon){
+try{
+const r1=await fetch(`https://geocoding-api.open-meteo.com/v1/reverse?latitude=${lat}&longitude=${lon}&language=fr`);
+const j1=await r1.json();
+const n=j1?.results?.[0]?.name;
+if(n) return n;
+}catch{}
+
+try{
+const r2=await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}&accept-language=fr`);
+const j2=await r2.json();
+const a=j2?.address||{};
+return a.city||a.town||a.village||a.county||null;
+}catch{}
+
+return null;
+}
+
+async function getWeather(lat,lon){
+const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&windspeed_unit=kmh`);
+const j=await r.json();
+const cw=j.current_weather;
+const city=await getCity(lat,lon);
+const icon=iconFromCode(cw.weathercode);
+const text=`${icon} ${city?city+" • ":""}${Math.round(cw.temperature)}°C • Vent ${Math.round(cw.windspeed)} km/h`;
+document.getElementById("weather").textContent=text;
+}
+
+if(navigator.geolocation){
+navigator.geolocation.getCurrentPosition(
+pos=>getWeather(pos.coords.latitude,pos.coords.longitude),
+()=>document.getElementById("weather").textContent="📍 Localisation refusée"
+);
+}
+
+</script>
+
+</body>
+</html>
